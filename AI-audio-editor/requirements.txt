@@ -1,0 +1,7 @@
+Flask==2.3.2
+flask-cors==6.0.1
+gunicorn==21.2.0
+numpy==2.0.0
+requests==2.31.0
+pydub==0.25.1
+imageio==2.37.0
