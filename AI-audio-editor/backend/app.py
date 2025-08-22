@@ -1,3 +1,6 @@
+
+import sys, types, audioop
+sys.modules['pyaudioop'] = audioop
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from backend.utils import process_audio
