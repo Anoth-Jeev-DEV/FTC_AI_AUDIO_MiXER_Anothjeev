@@ -1,22 +1,27 @@
 import os
-from pydub import AudioSegment
 import random
+from pydub import AudioSegment
+
+# Tell pydub where the bundled ffmpeg binary is
+ffmpeg_path = os.path.join(os.path.dirname(__file__), "ffmpeg", "ffmpeg")
+AudioSegment.converter = ffmpeg_path
 
 # Folder where your predefined BGMs are stored
 BGM_FOLDER = os.path.join(os.path.dirname(__file__), 'assets', 'bgms')
+
 
 def process_audio(voice_file, num_bgms=1, wish_name=None, extra_seconds=5):
     """
     Mixes an uploaded voice recording with exactly `num_bgms` selected BGMs sequentially,
     extends the BGM slightly after the voice ends (5 sec), and applies a fade-out at the end.
     Keeps the BGM stable and smooth so the voice is clearly audible.
-    
+
     Parameters:
     - voice_file: uploaded voice file (Flask FileStorage)
     - num_bgms: number of BGMs to apply (1, 2, or 3)
     - wish_name: optional filename for the output audio
     - extra_seconds: additional seconds of BGM after voice ends (default 5)
-    
+
     Returns:
     - Path to the final edited audio file
     """
@@ -35,10 +40,14 @@ def process_audio(voice_file, num_bgms=1, wish_name=None, extra_seconds=5):
     # ------------------------
     # 2. Select exactly num_bgms BGMs
     # ------------------------
-    all_bgms = [os.path.join(BGM_FOLDER, f) for f in os.listdir(BGM_FOLDER) if f.endswith('.mp3')]
+    all_bgms = [
+        os.path.join(BGM_FOLDER, f)
+        for f in os.listdir(BGM_FOLDER)
+        if f.endswith('.mp3')
+    ]
     if len(all_bgms) < num_bgms:
         raise ValueError(f"Not enough BGMs in the folder. Found {len(all_bgms)}, required {num_bgms}.")
-    
+
     selected_bgms = random.sample(all_bgms, num_bgms)
 
     # ------------------------
